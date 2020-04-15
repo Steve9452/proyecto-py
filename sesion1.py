@@ -230,15 +230,15 @@ class Ui_dlgSesion(object):
   
 
     def run_query(self, query, parameters = ()):
-        #conn = sqlite3.connect('db_name.db')
-        #c = conn.cursor()
-        #result= c.execute(query, parameters)
-        #conn.commit()
+        conn = sqlite3.connect(self.db_name)
+        c = conn.cursor()
+        result= c.execute(query, parameters)
+        conn.commit()
         #conn.close()
-        with sqlite3.connect(self.db_name) as conn:
-            cursor = conn.cursor()
-            result = cursor.execute(query, parameters)
-            conn.commit()
+        #with sqlite3.connect(self.db_name) as conn:
+        #    cursor = conn.cursor()
+        #    result = cursor.execute(query, parameters)
+        #    conn.commit()
         return result
     
     def validarDatosLog(self): #Pedir datos a database y guardar en array text, password

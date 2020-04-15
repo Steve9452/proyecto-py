@@ -108,7 +108,7 @@ class Ui_dlgSesion(object):
         self.lineNombre.setGeometry(QtCore.QRect(150, 120, 191, 21))
         #font = QtGui.QFont()
         #font.setFamily("OCR A Extended")
-        #font.setPointSize(9)
+        font.setPointSize(12)
         self.lineNombre.setFont(font)
         self.lineNombre.setMaxLength(20)
         self.lineNombre.setObjectName("lineNombre")
@@ -195,7 +195,7 @@ class Ui_dlgSesion(object):
 
     #funcion para dectar evento de presion de tecla
     def keyPressEvent(self,event):
-        print("Se ha presionado una tecla",event.text())
+        #print("Se ha presionado una tecla",event.text())
         #if (self.lineUsuario.hasFocus()):
         
         return QtWidgets.QLineEdit.keyPressEvent(self.lineUsuario,event)#retorna el valor de la tecla presionada
@@ -208,8 +208,8 @@ class Ui_dlgSesion(object):
 
     def fnAceptar(self):
         if (self.validarLog()):
-            print("Usuario: ",self.lineUsuario.text())
-            print("Password: ",self.lineContrasena.text())
+            #print("Usuario: ",self.lineUsuario.text())
+            #print("Password: ",self.lineContrasena.text())
             self.validarDatosLog()
 
 
@@ -246,37 +246,46 @@ class Ui_dlgSesion(object):
        db_rows = self.run_query(query)
        text= ''
        password= ''
-       i=0
+       name=''
+       permiss = 0
        for row in db_rows:
            
            text= row[0]
            password= row[1]
+           permiss= row[2]
+           name= row[3]
            if (self.lineUsuario.text() == text):
                if(self.lineContrasena.text() == password):                   
                    self.lineUsuario.setEnabled(False)
                    self.lineContrasena.setEnabled(False)
                    self.pushButtonAccept.setEnabled(False)
                    self.pushButtonCancel.setEnabled(False)
-                   print(i)
-                   self.logStatus(i)
-                   fnMensaje("Sesion iniciada satisfactoriamente ","Presione aceptar para continuar")#TEMPORAL verificar validacion de datos
+                   #print(permiss,name)
+                   self.logStatus(permiss,name)
+                   fnMensaje("Sesion iniciada satisfactoriamente ","Presione aceptar para iniciar el programa (VENTANA TEMPORAL)")#TEMPORAL verificar validacion de datos
                    
                     
                    return True              
            print("DATA: " ,text, password)
-           i=i+1
        fnMensaje("Fallo inicio de sesion","Usuario o contraseña incorrectos ")
        return False
 
-    def logStatus(self,permiss):
+    def logStatus(self,permiss,name):
         _translate = QtCore.QCoreApplication.translate
+        palette = QtGui.QPalette()
+        brush = QtGui.QBrush(QtGui.QColor(85, 85, 255))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Text, brush)
+        self.lineNombre.setPalette(palette)
+        self.lineRol.setPalette(palette)
+
         if(permiss == 0):
-            print("es admin")
-            self.lineNombre.setText(_translate("dlgSesion", "Juan Carlos "))
+            #print("es admin")
+            self.lineNombre.setText(_translate("dlgSesion", name))
             self.lineRol.setText(_translate("dlgSesion", "Administrador"))
         else:
-            print("es user")
-            self.lineNombre.setText(_translate("dlgSesion", "Betillo "))
+            #print("es user")
+            self.lineNombre.setText(_translate("dlgSesion", name))
             self.lineRol.setText(_translate("dlgSesion", "Esclavo "))
             
 

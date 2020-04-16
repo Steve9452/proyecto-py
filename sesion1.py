@@ -8,6 +8,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import os
 import sqlite3
 from PyQt5.QtWidgets import QMessageBox
 
@@ -23,7 +24,9 @@ def fnMensaje( sMensaje, sInformacion):
 
 
 class Ui_dlgSesion(object):
-    db_name='database.db'
+    THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+    db_name = os.path.join(THIS_FOLDER, 'database.db')
+    #db_name='database.db'
     def setupUi(self, dlgSesion):
         dlgSesion.setObjectName("dlgSesion")
         dlgSesion.resize(400, 300)
@@ -230,10 +233,20 @@ class Ui_dlgSesion(object):
   
 
     def run_query(self, query, parameters = ()):
+        
         conn = sqlite3.connect(self.db_name)
         c = conn.cursor()
-        result= c.execute(query, parameters)
+        try:
+            print("Estoy aqui ")
+            result= c.execute(query, parameters)
+            
+        except:
+            print("Error run_query no se pudo establecer conexion con base de datos")
         conn.commit()
+#        conn = sqlite3.connect(self.db_name)
+#        c = conn.cursor()
+#        result= c.execute(query, parameters)
+#        conn.commit()
         #conn.close()
         #with sqlite3.connect(self.db_name) as conn:
         #    cursor = conn.cursor()
@@ -242,7 +255,7 @@ class Ui_dlgSesion(object):
         return result
     
     def validarDatosLog(self): #Pedir datos a database y guardar en array text, password
-       query = 'SELECT * FROM login ORDER BY permiss'
+       query = 'SELECT * FROM tabla ORDER BY permiss'
        db_rows = self.run_query(query)
        text= ''
        password= ''

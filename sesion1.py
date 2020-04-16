@@ -255,7 +255,7 @@ class Ui_dlgSesion(object):
         return result
     
     def validarDatosLog(self): #Pedir datos a database y guardar en array text, password
-       query = 'SELECT * FROM tabla ORDER BY permiss'
+       query = 'SELECT * FROM login ORDER BY permiss'
        db_rows = self.run_query(query)
        text= ''
        password= ''
